@@ -1,0 +1,72 @@
+//277
+setcpm(150/4)
+
+$: s("bd*4")
+  .bank("rolandtr909")
+  .distort("2.5:.25")
+  .gain(.9)
+  ._scope()
+
+$:  s("hh")
+    .struct("x(11,16)")
+    .bank("rolandtr909")
+    .hpf(3500)
+    .gain(slider(0.29 ,0,1))
+
+$:  s("cp")
+    .struct("- x - x")
+    .bank("rolandtr909")
+    .room(.2)
+    .gain(slider(0.331,0,1))
+
+$: n(irand(8).sub(4).seg(16))
+  .scale("<G1:minor, <G2:minor - g3:minor ->>")
+  .s("sawtooth")
+  .dec(.12)
+  .sustain(0)
+  .lpf(220)
+  .lpenv(slider(3.968, 0, 8))
+  .lpq(10)
+  .distort("2:.25")
+  .gain(.4)
+  ._pianoroll()
+
+$: s("supersaw")
+  .n("<[0 ,5, 7] [3,8,10] [5,10,12] [7,12,14] >")
+  .scale("G2:minor")
+  .detune(.8)
+  .rel(3)
+  .slow(2)
+  .fm(1.5)
+  .fmh(2)
+  .room(.55)
+  .gain(.2)
+  .mask("<0!8 1!8>")
+  . _pianoroll()
+
+$: s("bytebeat*4")
+  .n(irand(7).seg(16))
+  .scale("<G4:minor G3:minor>")
+  .dec(.1)
+  .fm(sine.range(.5, 5).slow(4))
+  .fmh(cosine.range(1, 4).slow(3))
+  .hpf(1200)
+  .room(1)
+  .gain(.3)
+  .pan(sine.range(.15, .85).slow(4))
+  .degradeBy(0.33)
+
+$: s("tr808_perc")
+  .struct("x(5,16)")
+  .n(irand(6))
+  .hpf(900)
+  .room(.2)
+  .gain(.4)
+  .pan(cosine.range(.2,.8).slow(3))
+
+all(
+  x => x
+  .when("<0!24 1!4>",
+  y => y
+  .hpf(saw.range(200, 3000).slow(4))
+  .shape(saw.range(.05, .35).slow(4))))
