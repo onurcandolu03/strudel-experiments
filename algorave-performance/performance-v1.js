@@ -1,13 +1,11 @@
 //277
-setcpm(140/4)
+setcpm(120/4)
 
 const pianoGain = slider(0.552,0,1)
 const celloGain = slider(0.5,0,1)
 const hiGain = slider(0.5,0,1)
 const loGain = slider(0.762,0,1)
-const violinGain = slider(0.17,0,1)
 const arpGain = slider(0.641,0,1)
-const violaGain = slider(0.418,0,1)
 const drumGain = slider(0.642,0,1)
 
 const chords = chord(`D- Bb F@2 D- Bb G@2 D- A-7 G@2 D- C G-@2`).slow(16)
@@ -27,28 +25,28 @@ const progression = chords.voicing()
 //   overscan: 0
 // }))
 
-all(x => x.scope({
-  color: "white",
-  thickness: 3,
-  scale: 0.45,
-  pos: 0.5,
-  align: 1,
-  trigger: 0
-}))
+// all(x => x.scope({
+//   color: "white",
+//   thickness: 3,
+//   scale: 0.45,
+//   pos: 0.5,
+//   align: 1,
+//   trigger: 0
+// }))
 
 
-_$piano: progression
+$piano: progression
   .s("piano")
   .transpose("<0 -12 -12@2>")
   .room(1).roomsize(7)
-  .lpf(slider(612,0,2000))
+  .lpf(slider(0,0,2000))
   .gain(pianoGain)
   .orbit(3)
   .color("white")
 
 
 _$cello: n("<0>*1").set(chords).voicing()
-  .s("gm_cello").gain(1.3).lpf(1000)
+  .s("gm_cello:1").gain(1.3).lpf(1000)
   .transpose("<0 -12 -12@2>")
   .room(1).roomsize(7)
   .gain(celloGain)
@@ -77,7 +75,7 @@ _$superLo: n("<0>*1").set(chords).voicing()
 // irand(9).seg(12).rib(42,4)
 // "<0 4 7 6 5 8>*12"
 
-_$arp: n(irand(9).seg(12).rib(42,4))
+_$arp: n("<0 4 7 6 5 8>*12")
   .set(chords).voicing().s("supersaw")
   .transpose(-12).lpf(300).lpenv(3)
   .room(1)
@@ -89,7 +87,7 @@ _$arp: n(irand(9).seg(12).rib(42,4))
 // irand(9).seg(12).rib(17,4)
 // "<7 6 5 4 3 2>*12"
 
-_$arpHarm: n(irand(9).seg(12).rib(17,4))
+_$arpHarm: n("<7 6 5 4 3 2>*12")
   .set(chords).voicing().s("supersaw")
   .transpose(0).lpf(300).lpenv(3)
   .room(1)
@@ -112,13 +110,13 @@ _$drums: stack(
   s("bd:2").struct("x - x x - x - x")
     .lpf(500).gain(0.8).color("orange"),
 
-  s("bd:6").struct("- x - - x - x -")
+  s("bd:2").struct("- x - - x - x -")
     .lpf(900).gain(0.6)
     .sometimesBy(0.3, x => x.speed(0.8))
     .color("gold"),
 
-  s("[- sd:2]*2")
-    .lpf(900).gain(0.65).color("magenta"),
+  // s("[- sd:2]*2")
+  //   .lpf(900).gain(0.65).color("magenta"),
 
 ).bank("yamahatg33")
   .gain(drumGain)
@@ -134,7 +132,7 @@ const percGain = slider(0.3,0,1)
 const hypnoGain = slider(0.25,0,1)
 const synthGain = slider(0.3,0,1)
 
-
+//dont forget 140 bpm
 _$kick: s("techno_kicks").n(1)
   .struct(`<
     [x*4]!15
@@ -170,7 +168,7 @@ _$kick: s("techno_kicks").n(1)
   .gain(kickGain)
   .orbit(9)
 
-
+//dont forget 140 bpm
 _$bass: note("<d2!7 [d2 d2 d2 d3] d2!7 [d2 d2 f2 c2]>")
   .s("sawtooth")
   .struct(`<
@@ -229,7 +227,7 @@ _$ch: s("closed_hi-hats").n(3)
 
     [- x]*4!2
     [- x x x - x [x x] x]
-    [- x - x - x - -]
+    [- x - x - x ~ ~]
   >`)
   .gain("0.625 1 0.5 0.875")
   .gain(chGain)
@@ -271,7 +269,7 @@ _$snare: s("hard_snares").n(2)
     [- x - [x x]]
 
     [- x]*2!6
-    [- x - [x ~ x]]
+    [- x - [x x]]
     [- x - x]
 
     [- x]*2!4
@@ -282,8 +280,8 @@ _$snare: s("hard_snares").n(2)
     [- x]*2!3
     [- x - [x x]]
     [- x [x x] [x x]]
-    [x*8]
-    [x*16]
+    [[- x]*4]
+    [[- x]*8]
     [-]
   >`)
   .hpf(200)
@@ -320,7 +318,7 @@ _$perc: s("mixed_percussion_-_high").n(7)
   .pan(sine.range(0.2,0.8).slow(8))
   .orbit(14)
 
-
+//dont forget 140 bpm
 _$hypno: n(`<
   [0 0 3 0 <4 0> 6 3]!7
   [0 0 3 0 4 6 7]
@@ -371,8 +369,8 @@ const arpDriving = s("synth_loops_-_arps_driving")
 
 
 const arpMelodic = s("synth_loops_-_arps_melodic")
-  .n(33)     // 29, 33
-  .loopat(8) //  4,  8
+  .n(29)     // 29, 33
+  .loopat(4) //  4,  8
 
 
 const techno = s("synth_loops_-_techno")
@@ -382,3 +380,29 @@ const techno = s("synth_loops_-_techno")
 _$synth: acid 
   .gain(synthGain)
   .orbit(15)
+
+// PAN
+//orbitPan(15, sine.range(-1, 1).slow(4))
+
+// LOW PASS
+orbitLPF(15, slider(24000, 100, 24000, 10))
+orbitLPQ(15, slider(1, 0, 12, 0.1))
+
+// HIGH PASS
+orbitHPF(15, slider(0, 0, 4000, 10))
+
+// PHASER
+orbitPhaser(15, slider(0, 0, 0.7, 0.01))
+orbitPhaserRate(15, slider(0.15, 0.02, 2, 0.01))
+
+// DISTORTION
+orbitDistortion(15, slider(0, 0, 0.7, 0.01))
+orbitDistortionDrive(15, slider(3, 1, 8, 0.1))
+
+// DELAY
+orbitDelay(15, slider(0, 0, 0.7, 0.01))
+orbitDelayTime(15, 0.321)
+orbitDelayFeedback(15, slider(0.35, 0, 0.75, 0.01))
+
+// REVERB
+orbitReverb(15, slider(0, 0, 0.8, 0.01))
