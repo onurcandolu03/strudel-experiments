@@ -35,7 +35,7 @@ const progression = chords.voicing()
 // }))
 
 
-$piano: progression
+_$piano: progression
   .s("piano")
   .transpose("<0 -12 -12@2>")
   .room(1).roomsize(7)
@@ -127,11 +127,20 @@ const kickGain = slider(0.8,0,1)
 const bassGain = slider(0.35,0,1)
 const chGain = slider(0.4,0,1)
 const ohGain = slider(0.35,0,1)
-const snareGain = slider(0.45,0,1)
+const snareGain = slider(0.288,0,1)
 const percGain = slider(0.3,0,1)
 const hypnoGain = slider(0.25,0,1)
 const synthGain = slider(0.3,0,1)
-
+const autoMask = `<
+  0!8 1!4
+  0!8 1!4
+  0!8 1!8
+  0!8 1!4
+  0!8 1!2
+  0!8 1!2
+  0!8 1!4
+  0!8 1!4
+>`
 //dont forget 140 bpm
 _$kick: s("techno_kicks").n(1)
   .struct(`<
@@ -309,6 +318,7 @@ _$perc: s("mixed_percussion_-_high").n(7)
     [x(11,16)]
     [-]
   >`)
+  //.mask(autoMask)
   .hpf(500)
   .lpf(sine.range(1500,6000).slow(8))
   .delay(0.25)
@@ -343,6 +353,7 @@ _$hypno: n(`<
   .scale("D3:minor")
   .s("sawtooth")
   .struct("x(7,16)")
+//.mask(autoMask)
   .lpf(400)
   .lpq(6)
   .lpenv(2)
@@ -355,7 +366,6 @@ _$hypno: n(`<
   .room(0.4)
   .gain(hypnoGain)
   .orbit(16)
-
 
 
 const acid = s("synth_loops_-_acid_loops")
@@ -385,24 +395,73 @@ _$synth: acid
 //orbitPan(15, sine.range(-1, 1).slow(4))
 
 // LOW PASS
-orbitLPF(15, slider(24000, 100, 24000, 10))
-orbitLPQ(15, slider(1, 0, 12, 0.1))
+orbitLPF(15, slider(24000, 100, 24000, 10)) // slider(24000, 100, 24000, 10)
+orbitLPQ(15, slider(1, 0, 12, 0.1)) // slider(1, 0, 12, 0.1)
 
 // HIGH PASS
-orbitHPF(15, slider(0, 0, 4000, 10))
+orbitHPF(15, slider(0, 0, 4000, 10)) // slider(0, 0, 4000, 10)
 
 // PHASER
-orbitPhaser(15, slider(0, 0, 0.7, 0.01))
-orbitPhaserRate(15, slider(0.15, 0.02, 2, 0.01))
+orbitPhaser(15, slider(0, 0, 0.7, 0.01)) // slider(0, 0, 0.7, 0.01)
+orbitPhaserRate(15, slider(0.15, 0.02, 2, 0.01)) // slider(0.15, 0.02, 2, 0.01)
 
 // DISTORTION
-orbitDistortion(15, slider(0, 0, 0.7, 0.01))
-orbitDistortionDrive(15, slider(3, 1, 8, 0.1))
+orbitDistortion(15, slider(0, 0, 0.7, 0.01)) // slider(0, 0, 0.7, 0.01)
+orbitDistortionDrive(15, slider(3, 1, 8, 0.1)) // slider(3, 1, 8, 0.1)
 
 // DELAY
-orbitDelay(15, slider(0, 0, 0.7, 0.01))
-orbitDelayTime(15, 0.321)
-orbitDelayFeedback(15, slider(0.35, 0, 0.75, 0.01))
+orbitDelay(15, slider(0, 0, 0.7, 0.01)) // slider(0, 0, 0.7, 0.01)
+orbitDelayTime(15, 0.321) // 0.321
+orbitDelayFeedback(15, slider(0.35, 0, 0.75, 0.01)) // slider(0.35, 0, 0.75, 0.01)
 
 // REVERB
-orbitReverb(15, slider(0, 0, 0.8, 0.01))
+orbitReverb(15, slider(0, 0, 0.8, 0.01)) // slider(0, 0, 0.8, 0.01)
+
+//AUTOPILOT
+
+// $finalSynth: arrange(
+//   [8, s("synth_loops_-_acid_loops").n(2).loopat(8)],
+//   [4, silence],
+
+//   [8, s("synth_loops_-_acid_loops").n(10).loopat(8)],
+//   [4, silence],
+
+//   [8, s("synth_loops_-_acid_loops").n(9).loopat(4)],
+//   [8, silence],
+
+//   [8, s("synth_loops_-_arps_driving").n(17).loopat(4)],
+//   [4, silence],
+
+//   [8, s("synth_loops_-_acid_loops").n(13).loopat(1)],
+//   [2, silence],
+
+//   [8, s("synth_loops_-_acid_loops").n(15).loopat(1)],
+//   [2, silence],
+
+//   [8, s("synth_loops_-_acid_loops").n(16).loopat(1)],
+//   [4, silence],
+
+//   [8, s("synth_loops_-_techno").n(34).loopat(8)],
+//   [4, silence]
+// )
+//   .gain(slider(0.3,0,1))
+//   .orbit(17)
+
+// orbitLPF(17, sine.range(700,14000).slow(16))
+// orbitLPQ(17, sine.range(2,6).slow(32))
+// orbitHPF(17, sine.range(0,350).slow(16))
+
+// orbitPan(17, sine.range(-0.6,0.6).slow(8))
+
+// orbitPhaser(17, sine.range(0.05,0.4).slow(16))
+// orbitPhaserRate(17, sine.range(0.1,0.5).slow(32))
+
+// orbitDistortion(17, sine.range(0.1,0.35).slow(32))
+// orbitDistortionDrive(17, 3)
+
+// orbitDelay(17, sine.range(0.1,0.35).slow(8))
+// orbitDelayTime(17, 0.321)
+// orbitDelayFeedback(17, 0.4)
+
+// orbitReverb(17, sine.range(0.1,0.3).slow(16))
+
